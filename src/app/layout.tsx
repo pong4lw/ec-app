@@ -1,22 +1,22 @@
+// app/layout.tsx
+"use client";
+
+import { ReactNode } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./globals.css";
 import { Inter } from "next/font/google";
-import type { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
+const queryClient = new QueryClient();
 
-export const metadata: Metadata = {
-  title: "EC App",
-  description: "Next.js + Firebase Sample",
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ja">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
+      </body>
     </html>
   );
 }
