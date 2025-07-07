@@ -1,5 +1,5 @@
 import { fetchProducts } from "@/lib/firestore/products";
-import AuthForm from "./auth/AuthForm";
+import AuthFormModal from "./AuthFormModal";
 
 export default async function Home() {
   const products = await fetchProducts();
@@ -22,7 +22,8 @@ export default async function Home() {
           ))}
         </div>
       </div>
-      <AuthForm />
+
+      <AuthFormModal />
     </>
   );
 }
