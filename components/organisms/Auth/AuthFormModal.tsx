@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import AuthForm from "../auth/AuthForm";
+import { useState } from "react-vite";
+import AuthForm from "@/components/organisms/Auth/AuthForm";
 
 export default function AuthFormModal() {
   const [isOpen, setIsOpen] = useState(false);
