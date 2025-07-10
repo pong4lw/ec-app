@@ -1,4 +1,6 @@
-import { getProductById, fetchProducts } from "@/lib/firestore/products";
+export const dynamic = 'force-dynamic'; // ← これだけでOK
+
+import { getProductById } from "@/lib/firestore/products";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -9,32 +11,17 @@ type PageProps = {
   };
 };
 
-// ISR: 60秒で再生成
-export const revalidate = 60;
-
-// SSG対応：動的ルーティングの生成
-export async function generateStaticParams() {
-  const products = await fetchProducts();
-  return products.map((product) => ({
-    id: product.id,
-  }));
-}
-
-// SEO用メタデータ生成
-export async function generateMetadata(props: PageProps): Promise<Metadata> {
-  const { id } = props.params;
-  const product = await getProductById(id);
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const product = await getProductById(params.id);
   if (!product) return { title: "商品が見つかりません" };
-
   return {
     title: `${product.name} | 商品詳細`,
     description: product.description,
   };
 }
 
-export default async function ProductDetailPage(props: PageProps) {
-  const { id } = props.params;
-  const product = await getProductById(id);
+export default async function ProductDetailPage({ params }: PageProps) {
+  const product = await getProductById(params.id);
 
   if (!product) return notFound();
 
