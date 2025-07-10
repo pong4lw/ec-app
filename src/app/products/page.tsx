@@ -2,6 +2,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { fetchProducts } from "@/lib/firestore/products";
 
+function isValidUrl(url: string | undefined): boolean {
+  if (!url) return false;
+  try {
+    const parsed = new URL(url);
+    return ["http:", "https:"].includes(parsed.protocol);
+  } catch {
+    return false;
+  }
+}
+
 export default async function ProductListPage() {
   const products = await fetchProducts();
 
@@ -18,11 +28,15 @@ export default async function ProductListPage() {
               className="border rounded p-4 shadow hover:shadow-lg transition"
             >
               <Image
-                src={imageUrl}
+                src={
+                  isValidUrl(product.imageUrl)
+                    ? product.imageUrl
+                    : "/images/no-image.png"
+                }
                 alt={product.name}
-                width={320}      // 必須
-                height={160}     // 必須、h-40と同じくらい
-                className="object-cover rounded mb-2"
+                width={300}
+                height={200}
+                className="object-cover w-full h-48 rounded"
               />
               <h2 className="text-xl font-semibold">{product.name}</h2>
               <p className="text-gray-600 mt-1">¥{product.price}</p>
