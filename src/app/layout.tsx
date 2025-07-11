@@ -1,6 +1,8 @@
 import { Inter } from "next/font/google";
 import Providers from "@/src/app/providers";
 import { AuthProvider } from "@/components/organisms/Auth/AuthContext";
+import '@/styles/globals.css'; 
+
 
 import ProductListPage from "@/src/app/products/page";
 
