@@ -105,6 +105,7 @@ export default function AuthForm() {
         >
           新規登録
         </button>
+        {error && <p className="text-red-500">{error}</p>}
       </div>
     </div>
   );
