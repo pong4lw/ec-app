@@ -1,6 +1,4 @@
-export const dynamic = "force-dynamic"; // ← これだけでOK
-
-import { getProductById } from "@/lib/firestore/products";
+import { getProductById, fetchProducts } from "@/lib/firestore/products";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -11,22 +9,54 @@ type PageProps = {
   };
 };
 
+// 画像URLのバリデーション関数
+function isValidUrl(url?: string): boolean {
+  if (!url || typeof url !== "string") return false;
+  try {
+    const parsed = new URL(url);
+    return ["http:", "https:"].includes(parsed.protocol);
+  } catch {
+    return false;
+  }
+}
+
+// ISR設定：60秒ごとに再生成
+export const revalidate = 60;
+
+// 動的ルーティング生成（SSG対応）
+export async function generateStaticParams() {
+  const products = await fetchProducts();
+  return products.map((product) => ({
+    id: product.id.trim(),
+  }));
+}
+
+// SEO対応：メタデータ生成
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const product = await getProductById(params.id);
-  if (!product) return { title: "商品が見つかりません" };
+  const id = params?.id?.trim();
+  if (!id) {
+    return { title: "商品が見つかりません" };
+  }
+
+  const product = await getProductById(id);
+  if (!product) {
+    return { title: "商品が見つかりません" };
+  }
+
   return {
     title: `${product.name} | 商品詳細`,
-    description: product.description,
+    description: product.description || "",
   };
 }
 
-// ページコンポーネント本体
+// メインページコンポーネント
 export default async function ProductDetailPage({ params }: PageProps) {
-  if (!params?.id) return notFound();
+  const id = params?.id?.trim();
+  if (!id) return notFound();
 
-  const product = await getProductById(params.id);
+  const product = await getProductById(id);
   if (!product) return notFound();
 
   const imageUrl = isValidUrl(product.imageUrl)
@@ -41,13 +71,12 @@ export default async function ProductDetailPage({ params }: PageProps) {
         width={800}
         height={400}
         className="w-full h-64 object-cover rounded mb-6"
-        unoptimized
       />
       <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
       <p className="text-xl text-gray-700 mb-4">
-        ¥{product.price.toLocaleString()}
+        ¥{product.price?.toLocaleString?.() || "価格未設定"}
       </p>
-      <p className="text-gray-600">{product.description}</p>
+      <p className="text-gray-600 whitespace-pre-line">{product.description}</p>
     </div>
   );
 }

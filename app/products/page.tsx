@@ -43,7 +43,10 @@ export default async function ProductListPage() {
                 />
                 <h2 className="text-xl font-semibold">{product.name}</h2>
                 <p className="text-gray-600 mt-1">
-                  ¥{product.price.toLocaleString()}
+                  ¥
+                  {typeof product.price === "number"
+                    ? product.price.toLocaleString()
+                    : "価格未定"}
                 </p>
               </Link>
             );
