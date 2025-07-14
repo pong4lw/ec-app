@@ -24,8 +24,9 @@ export default async function ProductListPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => {
-            const imageUrl = product.imageUrl || "/images/no-image.png";
-            console.log(product);
+            const imageUrl = isValidUrl(product.imageUrl)
+              ? product.imageUrl
+              : "/images/no-image.png";
 
             return (
               <Link

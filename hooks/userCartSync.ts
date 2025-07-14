@@ -1,14 +1,19 @@
+// lib/hooks/useCartSync.ts
+
 import { useEffect } from "react";
 import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { useCartStore } from "@/stores/cartStore";
 import { useAuth } from "@/components/organisms/Auth/AuthContext";
 import { db } from "@/lib/firebase";
 
+/**
+ * Firestore ⇆ Zustand のリアルタイム同期
+ */
 export function useCartSync() {
   const { user } = useAuth();
   const { setCart, items } = useCartStore();
 
-  // Firestore → Zustand へリアルタイム同期
+  // Firestore → Zustand（購読）
   useEffect(() => {
     if (!user) return;
 
@@ -25,10 +30,9 @@ export function useCartSync() {
     return () => unsubscribe();
   }, [user, setCart]);
 
-  // Zustand → Firestore へ保存（itemsが変更されたら）
+  // Zustand → Firestore（items が更新されたら保存）
   useEffect(() => {
     if (!user) return;
-
     const cartRef = doc(db, "carts", user.uid);
     setDoc(cartRef, { items }, { merge: true });
   }, [items, user]);

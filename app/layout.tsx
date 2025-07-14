@@ -4,6 +4,7 @@ import { AuthProvider } from "@/components/organisms/Auth/AuthContext";
 import "@/styles/globals.css";
 import ProductListPage from "@/app/products/page"; // appからの絶対パスに修正
 import { useCartSync } from "@/hooks/useCartSync";
+import CartSyncProvider from '@/components/CartSyncProvider';
 
 const inter = Inter({ subsets: ["latin"] });
 
