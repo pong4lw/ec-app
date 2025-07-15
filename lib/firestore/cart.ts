@@ -1,11 +1,10 @@
-// lib/store/cart.ts
-import { create } from 'zustand';
-import { db } from '@/lib/firebase';
-import { doc, onSnapshot, setDoc } from 'firebase/firestore';
-import { auth } from '@/lib/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+// lib/store/cart.ts (最適化バージョン)
+import { create } from "zustand";
+import { db } from "@/lib/firebase";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { auth } from "@/lib/firebase";
 
-type CartItem = {
+export type CartItem = {
   id: string;
   name: string;
   price: number;
@@ -15,55 +14,43 @@ type CartItem = {
 
 type CartState = {
   items: CartItem[];
+  loading: boolean;
   setItems: (items: CartItem[]) => void;
-  addToCart: (item: Omit<CartItem, 'quantity'>) => void;
-  updateQuantity: (id: string, quantity: number) => void;
-  removeFromCart: (id: string) => void;
-  initCartSync: () => void;
+  addToCart: (item: Omit<CartItem, "quantity">) => Promise<void>;
+  updateQuantity: (id: string, quantity: number) => Promise<void>;
+  removeFromCart: (id: string) => Promise<void>;
+  loadCartOnce: () => Promise<void>; // ⬆ 新しい: 1回だけ読み込み
 };
 
 export const useCartStore = create<CartState>((set, get) => {
-  let unsubscribe: (() => void) | null = null;
-
-  // Firestore同期解除用を外部スコープに持つ
-  const initCartSync = () => {
-    // いったん前の監視解除
-    if (unsubscribe) unsubscribe();
-
-    // ユーザー認証状態監視
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const ref = doc(db, 'carts', user.uid);
-
-        unsubscribe = onSnapshot(ref, (snapshot) => {
-          if (snapshot.exists()) {
-            const data = snapshot.data();
-            set({ items: data.items || [] });
-          } else {
-            set({ items: [] });
-          }
-        });
-      } else {
-        // ログアウト時はカートクリア
-        set({ items: [] });
-        if (unsubscribe) {
-          unsubscribe();
-          unsubscribe = null;
-        }
-      }
-    });
-  };
-
   const syncCartToFirestore = async (items: CartItem[]) => {
     const user = auth.currentUser;
     if (!user) return;
-    const ref = doc(db, 'carts', user.uid);
+    const ref = doc(db, "carts", user.uid);
     await setDoc(ref, { items }, { merge: true });
   };
 
   return {
     items: [],
-    setItems: (items) => set({ items }),
+    loading: true,
+
+    setItems: (items) => set({ items, loading: false }),
+
+    loadCartOnce: async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        set({ items: [], loading: false });
+        return;
+      }
+      const ref = doc(db, "carts", user.uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        const data = snap.data();
+        set({ items: data.items || [], loading: false });
+      } else {
+        set({ items: [], loading: false });
+      }
+    },
 
     addToCart: async (item) => {
       const current = get().items;
@@ -90,7 +77,5 @@ export const useCartStore = create<CartState>((set, get) => {
       set({ items: updated });
       await syncCartToFirestore(updated);
     },
-
-    initCartSync,
   };
 });

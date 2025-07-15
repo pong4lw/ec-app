@@ -5,23 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCartStore } from "@/lib/firestore/cart";
 import { getProductById, Product } from "@/lib/firestore/products";
+import { useInitCartSync } from "@/lib/firestore/cartSync";
 
 export default function CartPage() {
   const items = useCartStore((state) => state.items);
   const addToCart = useCartStore((state) => state.addToCart);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
-  const initCartSync = useCartStore((state) => state.initCartSync);
+
+  // ここでカートの初期同期をフックで実行
+  useInitCartSync();
 
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    // Firestoreとの同期開始
-    initCartSync();
-  }, [initCartSync]);
-
-  useEffect(() => {
-    // カートに入ってる商品の詳細をフェッチ
     async function loadProducts() {
       const prods: Product[] = [];
       for (const item of items) {

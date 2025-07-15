@@ -31,23 +31,41 @@ export default function AuthForm() {
   };
 
   const handleLogOut = async () => {
-    await logOut();
+    setError(null);
+    try {
+      await logOut();
+    } catch (e: unknown) {
+      if (e instanceof Error) setError(e.message);
+      else setError("ログアウトで予期しないエラーが発生しました");
+    }
   };
 
-  if (loading)
+  // ローディング中の表示
+  if (loading) {
     return <p className="text-center text-gray-500">読み込み中...</p>;
+  }
 
+  // ログイン済みの表示（ログアウトボタンあり）
   if (user) {
     return (
-      <Header
-        user={user ? { name: user.email || "User" } : undefined}
-        onLogin={handleSignIn}
-        onLogout={handleLogOut}
-        onCreateAccount={handleSignUp}
-      />
+      <div className="max-w-sm mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg border border-gray-200 text-center">
+        <p className="mb-4 text-lg">
+          ようこそ、<strong>{user.email || "ユーザー"}</strong> さん！
+        </p>
+        <button
+          onClick={handleLogOut}
+          className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md"
+        >
+          ログアウト
+        </button>
+        {error && (
+          <p className="mt-4 text-red-500 text-sm font-medium">{error}</p>
+        )}
+      </div>
     );
   }
 
+  // 未ログイン時のログイン・新規登録フォーム
   return (
     <div className="max-w-sm mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg border border-gray-200">
       <h2 className="text-2xl font-bold text-center mb-6">
@@ -68,6 +86,7 @@ export default function AuthForm() {
           placeholder="example@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          autoComplete="email"
         />
       </div>
 
@@ -85,6 +104,7 @@ export default function AuthForm() {
           placeholder="••••••••"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          autoComplete="current-password"
         />
       </div>
 
@@ -105,7 +125,6 @@ export default function AuthForm() {
         >
           新規登録
         </button>
-        {error && <p className="text-red-500">{error}</p>}
       </div>
     </div>
   );
