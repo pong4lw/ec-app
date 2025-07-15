@@ -2,9 +2,8 @@
 import { Inter } from "next/font/google";
 import { AuthProvider } from "@/components/organisms/Auth/AuthContext";
 import "@/styles/globals.css";
-import ProductListPage from "@/app/products/page"; // appからの絶対パスに修正
-import { useCartSync } from "@/hooks/useCartSync";
-import CartSyncProvider from '@/components/CartSyncProvider';
+import ProductListPage from "@/app/products/page";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,14 +18,27 @@ export default function RootLayout({
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
             {/* ヘッダー */}
-            <header className="bg-white shadow p-4 text-xl font-semibold text-center">
-              My Shop
+            <header className="bg-white shadow px-4 py-4 flex justify-between items-center">
+              <h1 className="text-xl font-semibold">
+              <Link
+                href="/"
+                className="text-sm text-blue-600 hover:underline"
+              >
+                My Shop
+              </Link>
+</h1>
+              <Link
+                href="/cart"
+                className="text-sm text-blue-600 hover:underline"
+              >
+                🛒 カートを見る
+              </Link>
             </header>
 
             {/* メインコンテンツ */}
             <main className="flex-1 container mx-auto px-4 py-8">
               {children}
-              {/* 商品一覧ページも含める */}
+              {/* 商品一覧ページも含める（必要なら） */}
               <ProductListPage />
             </main>
 
