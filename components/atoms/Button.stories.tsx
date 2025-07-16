@@ -1,16 +1,20 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "@/components/atoms/Button";
+// components/atoms/Button.stories.tsx
+import { Button } from "./Button";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof Button> = {
-  component: Button,
   title: "Atoms/Button",
+  component: Button,
+  tags: ["autodocs"],
 };
 
 export default meta;
+
 type Story = StoryObj<typeof Button>;
 
-export const Default: Story = {
+export const Primary: Story = {
   args: {
-    label: "Click Me",
+    children: "クリック",
+    onClick: () => alert("clicked!"),
   },
 };

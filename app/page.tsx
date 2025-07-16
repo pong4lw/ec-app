@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { fetchProducts } from "@/lib/firestore/products";
-import CartSyncProvider from '@/components/CartSyncProvider';
+import { useEffect, useState } from "react";
+import { Product } from "@/lib/firestore/products";
+import { useCartStore } from "@/lib/firestore/cart";
+import { FaHeart, FaPlus, FaMinus } from "react-icons/fa";
 
 function isValidUrl(url: string | undefined): boolean {
   if (!url) return false;
@@ -13,8 +18,19 @@ function isValidUrl(url: string | undefined): boolean {
   }
 }
 
-export default async function ProductListPage() {
-  const products = await fetchProducts();
+export default function ProductListPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const { items, addToCart, updateQuantity } = useCartStore();
+
+  useEffect(() => {
+    const load = async () => {
+      const data = await fetchProducts();
+      setProducts(data);
+    };
+    load();
+  }, []);
+
+  const getQuantity = (id: string) => items.find((i) => i.id === id)?.quantity || 0;
 
   return (
     <div className="p-8">
@@ -28,29 +44,62 @@ export default async function ProductListPage() {
             const imageUrl = isValidUrl(product.imageUrl)
               ? product.imageUrl
               : "/no-image.webp";
+            const quantity = getQuantity(product.id);
 
             return (
-              <Link
+              <div
                 key={product.id}
-                href={`/products/${product.id}`}
-                className="border rounded p-4 shadow hover:shadow-lg transition block"
+                className="border rounded p-4 shadow hover:shadow-lg transition flex flex-col"
               >
-                <Image
-                  src={imageUrl}
-                  alt={product.name}
-                  width={320}
-                  height={160}
-                  className="object-cover rounded mb-2"
-                  unoptimized
-                />
+                <Link href={`/products/${product.id}`}>
+                  <Image
+                    src={imageUrl}
+                    alt={product.name}
+                    width={320}
+                    height={160}
+                    className="object-cover rounded mb-2"
+                    unoptimized
+                  />
+                </Link>
+
                 <h2 className="text-xl font-semibold">{product.name}</h2>
-                <p className="text-gray-600 mt-1">
+                <p className="text-gray-600 mb-2">
                   ¥
                   {typeof product.price === "number"
                     ? product.price.toLocaleString()
                     : "価格未定"}
                 </p>
-              </Link>
+
+                {/* カートの増減ボタン */}
+                <div className="flex items-center gap-2 mt-auto">
+                  <button
+                    onClick={() => updateQuantity(product.id, quantity - 1)}
+                    className="p-2 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50"
+                    disabled={quantity === 0}
+                  >
+                    <FaMinus />
+                  </button>
+                  <span>{quantity}</span>
+                  <button
+                    onClick={() =>
+                      addToCart({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price ?? 0,
+                        imageUrl: product.imageUrl,
+                      })
+                    }
+                    className="p-2 bg-blue-500 hover:bg-blue-600 text-white rounded"
+                  >
+                    <FaPlus />
+                  </button>
+
+                  {/* お気に入りボタン（見た目だけ） */}
+                  <button className="ml-auto text-red-500 hover:text-red-600">
+                    <FaHeart />
+                  </button>
+                </div>
+              </div>
             );
           })}
         </div>
