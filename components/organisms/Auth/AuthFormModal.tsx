@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react-vite";
+import { useState } from "react";
 import AuthForm from "@/components/organisms/Auth/AuthForm";
 
 export default function AuthFormModal() {

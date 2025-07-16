@@ -2,7 +2,7 @@
 import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import { ClientLayout } from "@/components/layout/ClientLayout";
-
+import { AuthProvider } from "@/components/organisms/Auth/AuthContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -14,7 +14,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ja">
       <body className={`${inter.className} bg-gray-50 text-gray-900`}>
-        <ClientLayout>{children}</ClientLayout>
+        <AuthProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </AuthProvider>
       </body>
     </html>
   );
