@@ -41,7 +41,7 @@ export default function ProductDetailPage({ params }: PageProps) {
 
   if (!product) return <div>読み込み中...</div>;
 
-  const imageUrl = product.imageUrl || "/images/no-image.png";
+  const imageUrl = product.imageUrl || "/no-image.webp";
   const quantity = cart[product.id] || 0;
 
   const increaseQuantity = () => {
@@ -120,7 +120,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                 className="border rounded p-4 shadow hover:shadow-lg transition block"
               >
                 <Image
-                  src={item.imageUrl || "/images/no-image.png"}
+                  src={item.imageUrl || "/public/no-image.webb"}
                   alt={item.name}
                   width={400}
                   height={300}

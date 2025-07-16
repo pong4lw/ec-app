@@ -23,7 +23,7 @@ export default function FavoritesPage() {
             >
               <Link href={`/products/${item.id}`}>
                 <Image
-                  src={item.imageUrl || "/images/no-image.png"}
+                  src={item.imageUrl || "/no-image.webp"}
                   alt={item.name}
                   width={300}
                   height={200}

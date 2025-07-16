@@ -45,7 +45,7 @@ export const ProductListClient = ({ products }: Props) => {
               typeof product.imageUrl === "string" &&
               ["http", "https"].some((p) => product.imageUrl?.startsWith(p))
                 ? product.imageUrl
-                : "/images/no-image.png";
+                : "/no-image.webp";
 
             const quantity = getQuantity(product.id);
 

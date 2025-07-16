@@ -67,7 +67,7 @@ export default function CartPage() {
             return (
               <div key={product.id} className="flex items-center gap-6 border-b pb-4">
                 <Image
-                  src={product.imageUrl || "/images/no-image.png"}
+                  src={product.imageUrl || "/no-image.webp"}
                   alt={product.name}
                   width={100}
                   height={100}

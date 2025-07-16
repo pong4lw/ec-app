@@ -27,7 +27,7 @@ export default async function ProductListPage() {
           {products.map((product) => {
             const imageUrl = isValidUrl(product.imageUrl)
               ? product.imageUrl
-              : "/images/no-image.png";
+              : "/no-image.webp";
 
             return (
               <Link
