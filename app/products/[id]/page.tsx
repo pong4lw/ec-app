@@ -1,30 +1,30 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { use } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getProductById, fetchProductsByTags } from "@/lib/firestore/products";
 import { useFavoriteStore } from "@/lib/firestore/favorites";
+import { useCartStore } from "@/lib/firestore/cart";
 import { FavoriteButton } from "@/components/atoms/FavoriteButton";
+import { FaHeart, FaPlus, FaMinus } from "react-icons/fa";
 
 type PageProps = {
   params: { id: string };
 };
 
-type CartType = {
-  [productId: string]: number;
-};
-
 export default function ProductDetailPage({ params }: PageProps) {
-  const { id } = use(params);
+  const { id } = params;
 
-  const [cart, setCart] = useState<CartType>({});
   const [product, setProduct] = useState<any>(null);
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
 
-  const { items, toggleFavorite } = useFavoriteStore(); // ✅ フックを使う
-  const isFav = items.some((i) => i.id === product?.id); // ✅ product 読み込み後に判定
+  const { items: favoriteItems } = useFavoriteStore();
+  const {
+    items: cartItems,
+    addToCart,
+    updateQuantity,
+  } = useCartStore();
 
   useEffect(() => {
     async function fetchData() {
@@ -42,37 +42,13 @@ export default function ProductDetailPage({ params }: PageProps) {
   if (!product) return <div>読み込み中...</div>;
 
   const imageUrl = product.imageUrl || "/no-image.webp";
-  const quantity = cart[product.id] || 0;
-
-  const increaseQuantity = () => {
-    setCart((prev) => ({
-      ...prev,
-      [product.id]: (prev[product.id] || 0) + 1,
-    }));
-  };
-
-  const decreaseQuantity = () => {
-    setCart((prev) => {
-      const current = prev[product.id] || 0;
-      if (current <= 1) {
-        const updated = { ...prev };
-        delete updated[product.id];
-        return updated;
-      } else {
-        return {
-          ...prev,
-          [product.id]: current - 1,
-        };
-      }
-    });
-  };
+  const quantity = cartItems.find((i) => i.id === product.id)?.quantity || 0;
 
   return (
     <div className="p-8">
       <div className="flex justify-between items-start mb-4">
         <h1 className="text-3xl font-bold">{product.name}</h1>
 
-        {/* ✅ お気に入りボタン */}
         <FavoriteButton product={product} />
       </div>
 
@@ -81,31 +57,39 @@ export default function ProductDetailPage({ params }: PageProps) {
         alt={product.name}
         width={600}
         height={400}
-        className="mb-4 rounded"
+        className="mb-4 rounded object-cover"
       />
+
       <p className="text-gray-700 mb-2">
         価格: ¥{product.price?.toLocaleString() ?? "未定"}
       </p>
-      <p className="text-gray-500 mb-4">カテゴリ: {product.category ?? "なし"}</p>
+      <p className="text-gray-500 mb-4">
+        カテゴリ: {product.category ?? "なし"}
+      </p>
 
-      {/* 数量操作ボタン */}
-      <div className="flex items-center gap-4 mb-6">
+      {/* カートの増減ボタン */}
+      <div className="flex items-center gap-2 mt-4">
         <button
-          onClick={decreaseQuantity}
-          className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
+          onClick={() => updateQuantity(product.id, quantity - 1)}
+          className="p-2 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50"
+          disabled={quantity === 0}
         >
-          −
+          <FaMinus />
         </button>
-        <span className="text-xl">{quantity}</span>
+        <span>{quantity}</span>
         <button
-          onClick={increaseQuantity}
-          className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={() =>
+            addToCart({
+              id: product.id,
+              name: product.name,
+              price: product.price ?? 0,
+              imageUrl: product.imageUrl,
+            })
+          }
+          className="p-2 bg-blue-500 hover:bg-blue-600 text-white rounded"
         >
-          ＋
+          <FaPlus />
         </button>
-        {quantity > 0 && (
-          <span className="text-sm text-green-600">カートに追加済み</span>
-        )}
       </div>
 
       {/* 関連商品 */}
@@ -120,7 +104,7 @@ export default function ProductDetailPage({ params }: PageProps) {
                 className="border rounded p-4 shadow hover:shadow-lg transition block"
               >
                 <Image
-                  src={item.imageUrl || "/public/no-image.webb"}
+                  src={item.imageUrl || "/no-image.webp"}
                   alt={item.name}
                   width={400}
                   height={300}

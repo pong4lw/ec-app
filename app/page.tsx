@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Product } from "@/lib/firestore/products";
 import { useCartStore } from "@/lib/firestore/cart";
 import { FaHeart, FaPlus, FaMinus } from "react-icons/fa";
+import { FavoriteButton } from "@/components/atoms/FavoriteButton";
 
 function isValidUrl(url: string | undefined): boolean {
   if (!url) return false;
@@ -94,10 +95,8 @@ export default function ProductListPage() {
                     <FaPlus />
                   </button>
 
-                  {/* お気に入りボタン（見た目だけ） */}
-                  <button className="ml-auto text-red-500 hover:text-red-600">
-                    <FaHeart />
-                  </button>
+                  {/* お気に入りボタン */}
+                    <FavoriteButton product={product} />
                 </div>
               </div>
             );

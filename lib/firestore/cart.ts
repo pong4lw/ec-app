@@ -67,7 +67,7 @@ export const useCartStore = create<CartState>((set, get) => {
           )
         : [...current, { ...item, quantity: 1 }];
       set({ items: newItems });
-  console.log("syncing:", items);
+  console.log("syncing:", newItems);
 
       await syncCartToFirestore(newItems);
     },
@@ -81,7 +81,7 @@ export const useCartStore = create<CartState>((set, get) => {
         i.id === id ? { ...i, quantity } : i
       );
       set({ items: updated });
-  console.log("syncing:", items);
+  console.log("syncing:", updated);
 
       await syncCartToFirestore(updated);
     },
@@ -89,7 +89,7 @@ export const useCartStore = create<CartState>((set, get) => {
     removeFromCart: async (id) => {
       const updated = get().items.filter((i) => i.id !== id);
       set({ items: updated });
-  console.log("syncing:", items);
+  console.log("syncing:", updated);
 
       await syncCartToFirestore(updated);
     },
