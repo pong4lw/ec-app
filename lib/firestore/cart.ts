@@ -1,8 +1,9 @@
-// lib/store/cart.ts (最適化バージョン)
+// lib/store/cart.ts
+"use client";
+
 import { create } from "zustand";
-import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { auth } from "@/lib/firebase";
+import { db, auth } from "@/lib/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export type CartItem = {
   id: string;
@@ -19,7 +20,7 @@ type CartState = {
   addToCart: (item: Omit<CartItem, "quantity">) => Promise<void>;
   updateQuantity: (id: string, quantity: number) => Promise<void>;
   removeFromCart: (id: string) => Promise<void>;
-  loadCartOnce: () => Promise<void>; // ⬆ 新しい: 1回だけ読み込み
+  loadCartOnce: () => Promise<void>;
 };
 
 export const useCartStore = create<CartState>((set, get) => {
@@ -27,6 +28,7 @@ export const useCartStore = create<CartState>((set, get) => {
     const user = auth.currentUser;
     if (!user) return;
     const ref = doc(db, "carts", user.uid);
+    console.log(items);
     await setDoc(ref, { items }, { merge: true });
   };
 
@@ -46,7 +48,11 @@ export const useCartStore = create<CartState>((set, get) => {
       const snap = await getDoc(ref);
       if (snap.exists()) {
         const data = snap.data();
-        set({ items: data.items || [], loading: false });
+        if (Array.isArray(data.items)) {
+          set({ items: data.items, loading: false });
+        } else {
+          set({ items: [], loading: false });
+        }
       } else {
         set({ items: [], loading: false });
       }
@@ -65,6 +71,10 @@ export const useCartStore = create<CartState>((set, get) => {
     },
 
     updateQuantity: async (id, quantity) => {
+      if (quantity <= 0) {
+        await get().removeFromCart(id);
+        return;
+      }
       const updated = get().items.map((i) =>
         i.id === id ? { ...i, quantity } : i
       );

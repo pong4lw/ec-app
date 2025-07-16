@@ -1,8 +1,17 @@
-// components/layout/ClientLayout.tsx
 "use client";
 
-import { AuthProvider } from "@/components/organisms/Auth/AuthContext";
+import React, { useState } from "react";
+import AuthModal from "@/components/organisms/Auth/AuthModal";
+import { useAuth } from "@/components/organisms/Auth/AuthContext";
 
-export function ClientLayout({ children }: { children: React.ReactNode }) {
-  return <AuthProvider>{children}</AuthProvider>;
-}
+export const ClientLayout = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  return (
+    <>
+      <main className="container mx-auto px-4 py-8">{children}</main>
+      <AuthModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </>
+  );
+};

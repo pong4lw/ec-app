@@ -116,6 +116,9 @@ export default function CartPage() {
             >
               買い物を続ける
             </Link>
+            <Link href="/checkout" className="text-sm text-blue-600 hover:underline">
+              🧾 購入手続き
+            </Link>
           </div>
         </div>
       )}

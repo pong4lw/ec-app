@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { use } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getProductById, fetchProductsByTags } from "@/lib/firestore/products";
@@ -14,7 +15,7 @@ type CartType = {
 };
 
 export default function ProductDetailPage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = use(params);
 
   const [cart, setCart] = useState<CartType>({});
   const [product, setProduct] = useState<any>(null);
