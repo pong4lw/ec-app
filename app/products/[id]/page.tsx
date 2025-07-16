@@ -8,13 +8,14 @@ import { useFavoriteStore } from "@/lib/firestore/favorites";
 import { useCartStore } from "@/lib/firestore/cart";
 import { FavoriteButton } from "@/components/atoms/FavoriteButton";
 import { FaHeart, FaPlus, FaMinus } from "react-icons/fa";
+import { use } from "react";
 
 type PageProps = {
   params: { id: string };
 };
 
 export default function ProductDetailPage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = use(params);
 
   const [product, setProduct] = useState<any>(null);
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
