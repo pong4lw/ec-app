@@ -5,13 +5,15 @@ import { use } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getProductById, fetchProductsByTags } from "@/lib/firestore/products";
+import { useFavoriteStore } from "@/lib/firestore/favorites";
+import { FavoriteButton } from "@/components/atoms/FavoriteButton";
 
 type PageProps = {
   params: { id: string };
 };
 
 type CartType = {
-  [productId: string]: number; // 商品IDと個数
+  [productId: string]: number;
 };
 
 export default function ProductDetailPage({ params }: PageProps) {
@@ -20,6 +22,9 @@ export default function ProductDetailPage({ params }: PageProps) {
   const [cart, setCart] = useState<CartType>({});
   const [product, setProduct] = useState<any>(null);
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
+
+  const { items, toggleFavorite } = useFavoriteStore(); // ✅ フックを使う
+  const isFav = items.some((i) => i.id === product?.id); // ✅ product 読み込み後に判定
 
   useEffect(() => {
     async function fetchData() {
@@ -64,7 +69,13 @@ export default function ProductDetailPage({ params }: PageProps) {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
+      <div className="flex justify-between items-start mb-4">
+        <h1 className="text-3xl font-bold">{product.name}</h1>
+
+        {/* ✅ お気に入りボタン */}
+        <FavoriteButton product={product} />
+      </div>
+
       <Image
         src={imageUrl}
         alt={product.name}
@@ -97,7 +108,7 @@ export default function ProductDetailPage({ params }: PageProps) {
         )}
       </div>
 
-      {/* 関連商品表示 */}
+      {/* 関連商品 */}
       {relatedProducts.length > 0 && (
         <div className="mt-10">
           <h2 className="text-2xl font-semibold mb-4">同じタグの商品</h2>

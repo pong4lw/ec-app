@@ -49,7 +49,6 @@ export default function RootLayout({
               </div>
             </div>
           </header>
-
           <ClientLayout>{children}</ClientLayout>
         </div>
         {/* フッター */}
@@ -61,6 +60,14 @@ export default function RootLayout({
             <Link href="/cart" className="text-blue-600 hover:underline">
               🛒 カートを見る
             </Link>
+<Link href="/orders" className="text-sm text-blue-600 hover:underline">
+  🧾 購入履歴
+</Link>
+
+<Link href="/favorites" className="text-sm text-blue-600 hover:underline">
+  ❤️ お気に入り
+</Link>
+
           </div>
           &copy; {new Date().getFullYear()} Your Company
         </footer>
