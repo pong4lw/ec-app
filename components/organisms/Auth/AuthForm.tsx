@@ -67,10 +67,7 @@ export default function AuthForm() {
 
   // 未ログイン時のログイン・新規登録フォーム
   return (
-    <div className="max-w-sm mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg border border-gray-200">
-      <h2 className="text-2xl font-bold text-center mb-6">
-        ログインまたは新規登録
-      </h2>
+    <div className="row max-w-sm mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg border border-gray-200">
 
       <div className="mb-4">
         <label

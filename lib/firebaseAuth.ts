@@ -1,7 +1,4 @@
 // lib/firebase-auth.ts
-
-import { getAuth } from 'firebase/auth';
-import { initializeApp } from 'firebase/app';
 import { auth } from "./firebase";
 import {
   createUserWithEmailAndPassword,
@@ -9,9 +6,6 @@ import {
   signOut,
   UserCredential,
 } from "firebase/auth";
-
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
 
 export async function signUp(
   email: string,

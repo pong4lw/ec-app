@@ -14,11 +14,14 @@
     "test:integration": "jest __tests__/integration"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.1.1",
     "@tanstack/react-query": "^5.81.5",
     "firebase": "^11.10.0",
     "next": "^15.3.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.60.0",
+    "zod": "^4.0.5",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
@@ -60,9 +63,9 @@
     "typescript-eslint": "^8.36.0",
     "vitest": "^3.2.4"
   },
-"browserslist": [
-  "defaults",
-  "not IE 11",
-  "not op_mini all"
-]
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "not op_mini all"
+  ]
 }

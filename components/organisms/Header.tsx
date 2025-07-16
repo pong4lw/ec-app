@@ -11,7 +11,8 @@ export interface HeaderProps {
 export const Header = ({ user, onLogout }: HeaderProps) => {
   return (
     <header className="bg-white shadow-md py-4 px-6 rounded-md max-w-2xl mx-auto mt-10 border border-gray-200">
-      <div className="flex flex-col items-center">
+
+      <div className="col items-center">
         <h1 className="text-2xl font-bold text-gray-800 mb-4">
           {user?.name
             ? `ようこそ、${user.name} さん`

@@ -3,6 +3,16 @@ import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import Link from "next/link";
 import { ClientLayout } from "@/components/layout/ClientLayout";
+import { Header } from "@/components/organisms/Header";
+import { Button } from "@/components/atoms/Button";
+import AuthForm from "@/components/organisms/Auth/AuthForm";
+
+export type User = { name: string | null };
+
+export interface HeaderProps {
+  user?: User;
+  onLogout?: () => void;
+}
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,7 +21,7 @@ export const metadata = {
   description: "Next.js shopping app",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children, user, onLogout }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
       <body className={`${inter.className} bg-gray-50 text-gray-900`}>
@@ -32,7 +42,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </Link>
                 </div>
               </div>
+                <div className="space-x-4">
+
+                  {user?.name
+                    ? `ようこそ、${user.name} さん`
+                    : ""}
+              </div>
+
             </header>
+                {user ? (
+                  <button
+                    onClick={() => onLogout && onLogout()}
+                    disabled={!onLogout}
+                    className="px-4 py-2 bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white rounded-md"
+                  >
+                    ログアウト
+                  </button>
+                ) : (
+                  <div></div>
+                )}
 
             {/* メイン */}
             <main className="flex-1 container mx-auto px-4 py-8 min-h-[400px]">
@@ -47,6 +75,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </div>
               &copy; {new Date().getFullYear()} Your Company
             </footer>
+                {user ? (
+                  <button
+                    onClick={() => onLogout && onLogout()}
+                    disabled={!onLogout}
+                    className="px-4 py-2 bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white rounded-md"
+                  >
+                  </button>
+                ) : (
+                    <AuthForm />
+                )}
+
+
           </div>
         </ClientLayout>
       </body>
