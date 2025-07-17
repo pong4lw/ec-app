@@ -1,14 +1,13 @@
 // app/checkout/success/page.tsx
 import React from "react";
+import { Metadata } from "next";
 
-type Props = {
-  searchParams: {
-    orderId?: string;
-  };
+type PageProps = {
+  searchParams?: { [key: string]: string | string[] | undefined };
 };
 
-export default function SuccessPage({ searchParams }: Props) {
-  const orderId = searchParams.orderId;
+export default function SuccessPage({ searchParams }: PageProps) {
+  const orderId = searchParams?.orderId;
 
   return (
     <div className="p-6">
