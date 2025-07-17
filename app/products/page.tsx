@@ -6,10 +6,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { Product } from "@/lib/firestore/products";
 import { useCartStore } from "@/lib/firestore/cart";
-import { getProducts } from "@/lib/firestore/products";
+import { fetchProducts } from "@/lib/firestore/products";
 
 export default async function ProductPage() {
-  const products = await getProducts(); // サーバーコンポーネントで取得
+  const products = await fetchProducts(); // サーバーコンポーネントで取得
 
   return <ProductListClient products={products} />;
 }
