@@ -10,7 +10,7 @@ export default async function SuccessPage({
     typeof searchParams?.orderId === "string"
       ? searchParams.orderId
       : Array.isArray(searchParams?.orderId)
-        ? searchParams?.orderId[0]
+        ? searchParams.orderId[0]
         : undefined;
 
   return (
