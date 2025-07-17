@@ -7,7 +7,7 @@ import { getProductById, fetchProductsByTags } from "@/lib/firestore/products";
 import { useFavoriteStore } from "@/lib/firestore/favorites";
 import { useCartStore } from "@/lib/firestore/cart";
 import { FavoriteButton } from "@/components/atoms/FavoriteButton";
-import { FaHeart, FaPlus, FaMinus } from "react-icons/fa";
+import { FaPlus, FaMinus } from "react-icons/fa";
 import { use } from "react";
 
 type PageProps = {
@@ -21,11 +21,7 @@ export default function ProductDetailPage({ params }: PageProps) {
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
 
   const { items: favoriteItems } = useFavoriteStore();
-  const {
-    items: cartItems,
-    addToCart,
-    updateQuantity,
-  } = useCartStore();
+  const { items: cartItems, addToCart, updateQuantity } = useCartStore();
 
   useEffect(() => {
     async function fetchData() {

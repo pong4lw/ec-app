@@ -1,4 +1,5 @@
 // app/layout.tsx
+import React from "react";
 import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import { ClientLayout } from "@/components/layout/clientLayout";

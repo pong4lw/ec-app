@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { CartItem } from "./CartItem";
 import { CartSummary } from "./CartSummary";
 import { Product } from "@/lib/firestore/products";
@@ -10,10 +11,15 @@ type Props = {
   onRemove: (id: string) => void;
 };
 
-export const CartList = ({ products, getQuantity, onChangeQuantity, onRemove }: Props) => {
+export const CartList = ({
+  products,
+  getQuantity,
+  onChangeQuantity,
+  onRemove,
+}: Props) => {
   const total = products.reduce(
     (sum, p) => sum + (p.price || 0) * getQuantity(p.id),
-    0
+    0,
   );
 
   if (products.length === 0) {

@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import { useEffect, useState } from "react";
 import { useCartStore } from "@/lib/firestore/cart";
 import { getProductById, Product } from "@/lib/firestore/products";
@@ -27,7 +27,8 @@ export default function CartPage() {
     items.length > 0 ? load() : setProducts([]);
   }, [items]);
 
-  const getQuantity = (id: string) => items.find((i) => i.id === id)?.quantity || 0;
+  const getQuantity = (id: string) =>
+    items.find((i) => i.id === id)?.quantity || 0;
   const onChangeQuantity = (id: string, delta: number) => {
     const nextQty = getQuantity(id) + delta;
     nextQty < 1 ? removeFromCart(id) : updateQuantity(id, nextQty);

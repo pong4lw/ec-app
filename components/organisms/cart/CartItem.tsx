@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import Image from "next/image";
 
 type Props = {
@@ -14,7 +15,13 @@ type Props = {
   onRemove: () => void;
 };
 
-export const CartItem = ({ product, quantity, onIncrease, onDecrease, onRemove }: Props) => {
+export const CartItem = ({
+  product,
+  quantity,
+  onIncrease,
+  onDecrease,
+  onRemove,
+}: Props) => {
   return (
     <div className="flex items-center gap-6 border-b pb-4">
       <Image
@@ -29,10 +36,25 @@ export const CartItem = ({ product, quantity, onIncrease, onDecrease, onRemove }
         <p className="text-gray-600">¥{product.price?.toLocaleString()}</p>
 
         <div className="mt-2 flex items-center gap-2">
-          <button onClick={onDecrease} className="px-2 py-1 border rounded bg-gray-100 hover:bg-gray-200">−</button>
+          <button
+            onClick={onDecrease}
+            className="px-2 py-1 border rounded bg-gray-100 hover:bg-gray-200"
+          >
+            −
+          </button>
           <span>{quantity}</span>
-          <button onClick={onIncrease} className="px-2 py-1 border rounded bg-gray-100 hover:bg-gray-200">＋</button>
-          <button onClick={onRemove} className="ml-4 text-sm text-red-500 hover:underline">削除</button>
+          <button
+            onClick={onIncrease}
+            className="px-2 py-1 border rounded bg-gray-100 hover:bg-gray-200"
+          >
+            ＋
+          </button>
+          <button
+            onClick={onRemove}
+            className="ml-4 text-sm text-red-500 hover:underline"
+          >
+            削除
+          </button>
         </div>
       </div>
     </div>

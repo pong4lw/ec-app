@@ -7,7 +7,7 @@ import { fetchProducts } from "@/lib/firestore/products";
 import { useEffect, useState } from "react";
 import { Product } from "@/lib/firestore/products";
 import { useCartStore } from "@/lib/firestore/cart";
-import { FaHeart, FaPlus, FaMinus } from "react-icons/fa";
+import { FaPlus, FaMinus } from "react-icons/fa";
 import { FavoriteButton } from "@/components/atoms/FavoriteButton";
 
 function isValidUrl(url: string | undefined): boolean {

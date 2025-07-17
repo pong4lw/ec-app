@@ -9,7 +9,6 @@ import { useInitCartSync } from "@/lib/firestore/cartSync";
 
 export default function CartPage() {
   const items = useCartStore((state) => state.items);
-  const addToCart = useCartStore((state) => state.addToCart);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
 
@@ -35,7 +34,8 @@ export default function CartPage() {
   }, [items]);
 
   // 数量の取得（itemsのquantity優先）
-  const getQuantity = (id: string) => items.find((i) => i.id === id)?.quantity || 0;
+  const getQuantity = (id: string) =>
+    items.find((i) => i.id === id)?.quantity || 0;
 
   // 数量増減
   const onChangeQuantity = (id: string, delta: number) => {
@@ -65,7 +65,10 @@ export default function CartPage() {
           {products.map((product) => {
             const quantity = getQuantity(product.id);
             return (
-              <div key={product.id} className="flex items-center gap-6 border-b pb-4">
+              <div
+                key={product.id}
+                className="flex items-center gap-6 border-b pb-4"
+              >
                 <Image
                   src={product.imageUrl || "/no-image.webp"}
                   alt={product.name}
@@ -75,7 +78,9 @@ export default function CartPage() {
                 />
                 <div className="flex-1">
                   <h2 className="text-lg font-semibold">{product.name}</h2>
-                  <p className="text-gray-600">¥{product.price?.toLocaleString()}</p>
+                  <p className="text-gray-600">
+                    ¥{product.price?.toLocaleString()}
+                  </p>
 
                   {/* 数量操作ボタン */}
                   <div className="mt-2 flex items-center gap-2">
@@ -116,7 +121,10 @@ export default function CartPage() {
             >
               買い物を続ける
             </Link>
-            <Link href="/checkout" className="text-sm text-blue-600 hover:underline">
+            <Link
+              href="/checkout"
+              className="text-sm text-blue-600 hover:underline"
+            >
               🧾 購入手続き
             </Link>
           </div>

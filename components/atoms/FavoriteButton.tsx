@@ -1,9 +1,17 @@
 // components/FavoriteButton.tsx
 "use client";
-
+import React from "react";
 import { useFavoriteStore } from "@/lib/firestore/favorites";
 
-export const FavoriteButton = ({ product }: { product: any }) => {
+// 型定義（必要に応じて拡張）
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  [key: string]: any; // 不明な追加プロパティがある場合は必要に応じて
+}
+
+export const FavoriteButton = ({ product }: { product: Product }) => {
   const { items, toggleFavorite } = useFavoriteStore();
   const isFav = items.some((i) => i.id === product.id);
 

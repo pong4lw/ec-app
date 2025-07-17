@@ -3,8 +3,30 @@
 import React, { useEffect, useState } from "react";
 import { fetchOrderHistory } from "@/lib/firestore/orders";
 
+// 商品の型定義
+interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+// 注文データの型定義
+interface Order {
+  id: string;
+  items: OrderItem[];
+  name: string;
+  email: string;
+  address: string;
+  phone: string;
+  payment: string;
+  createdAt: {
+    toDate: () => Date;
+  };
+}
+
 export default function OrdersPage() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     fetchOrderHistory().then(setOrders);
@@ -18,8 +40,8 @@ export default function OrdersPage() {
       ) : (
         <ul className="space-y-6">
           {orders.map((order) => {
-            const totalPrice = order.items?.reduce(
-              (sum: number, item: any) => sum + item.price * item.quantity,
+            const totalPrice = order.items.reduce(
+              (sum, item) => sum + item.price * item.quantity,
               0,
             );
 
@@ -41,7 +63,7 @@ export default function OrdersPage() {
 
                 <h2 className="text-md font-semibold mb-2">注文商品</h2>
                 <ul className="ml-4 list-disc text-sm space-y-1">
-                  {order.items?.map((item: any, index: number) => (
+                  {order.items.map((item, index) => (
                     <li key={index}>
                       {item.name} × {item.quantity}（¥
                       {(item.price * item.quantity).toLocaleString()}）
