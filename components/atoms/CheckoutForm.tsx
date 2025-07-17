@@ -3,7 +3,13 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useAuth } from "@/components/organisms/Auth/AuthContext";
+import { useRouter } from "next/navigation";
+import { useCartStore } from "@/lib/firestore/cart";
+import { createOrder } from "@/lib/firestore/orders"; // ← Firestore登録関数
 
+// バリデーションスキーマ
 const CheckoutSchema = z.object({
   name: z.string().min(1, "名前を入力してください"),
   email: z.string().email("有効なメールアドレスを入力してください"),
@@ -17,17 +23,50 @@ const CheckoutSchema = z.object({
 type CheckoutFormData = z.infer<typeof CheckoutSchema>;
 
 export default function CheckoutForm() {
+  const { user } = useAuth();
+  const router = useRouter();
+  const { items, clearCart } = useCartStore();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(CheckoutSchema),
   });
 
-  const onSubmit = (data: CheckoutFormData) => {
-    console.log("送信データ:", data);
-    // ここでFirestoreに送信 or API呼び出し
+  // ユーザー情報でフォーム初期化
+  useEffect(() => {
+    if (user) {
+      reset({
+        name: user.displayName || "",
+        email: user.email || "",
+      });
+    }
+  }, [user, reset]);
+
+  const onSubmit = async (data: CheckoutFormData) => {
+    if (!user) {
+      alert("ログインしてください");
+      return;
+    }
+
+    try {
+      await saveOrder({
+        items,
+        name: data.name,
+        email: data.email,
+        address: data.address,
+        phone: data.phone,
+        payment: data.payment,
+      });
+      clearCart();
+      router.push(`/checkout/success?orderId=${orderId}`);
+    } catch (err) {
+      console.error("注文エラー:", err);
+      alert("注文処理に失敗しました");
+    }
   };
 
   return (
@@ -45,12 +84,10 @@ export default function CheckoutForm() {
           {...register("name")}
           className="mt-1 w-full border px-3 py-2 rounded"
         />
-        {errors.name && (
-          <p className="text-red-500 text-sm">{errors.name.message}</p>
-        )}
+        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
       </div>
 
-      {/* メール */}
+      {/* メールアドレス */}
       <div>
         <label className="block font-medium">メールアドレス</label>
         <input
@@ -58,9 +95,7 @@ export default function CheckoutForm() {
           {...register("email")}
           className="mt-1 w-full border px-3 py-2 rounded"
         />
-        {errors.email && (
-          <p className="text-red-500 text-sm">{errors.email.message}</p>
-        )}
+        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
       </div>
 
       {/* 住所 */}
@@ -71,9 +106,7 @@ export default function CheckoutForm() {
           {...register("address")}
           className="mt-1 w-full border px-3 py-2 rounded"
         />
-        {errors.address && (
-          <p className="text-red-500 text-sm">{errors.address.message}</p>
-        )}
+        {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
       </div>
 
       {/* 電話番号 */}
@@ -84,9 +117,7 @@ export default function CheckoutForm() {
           {...register("phone")}
           className="mt-1 w-full border px-3 py-2 rounded"
         />
-        {errors.phone && (
-          <p className="text-red-500 text-sm">{errors.phone.message}</p>
-        )}
+        {errors.phone && <p className="text-red-500 text-sm">{errors.phone.message}</p>}
       </div>
 
       {/* 支払い方法 */}
