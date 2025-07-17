@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Product } from "@/lib/firestore/products";
-import { useCartStore } from "@/lib/store/cart";
+import { useCartStore } from "@/lib/firestore/cart";
 
 type Props = {
   products: Product[];
@@ -12,7 +12,8 @@ type Props = {
 export const ProductListClient = ({ products }: Props) => {
   const { items, addToCart, updateQuantity, removeFromCart } = useCartStore();
 
-  const getQuantity = (id: string) => items.find((i) => i.id === id)?.quantity || 0;
+  const getQuantity = (id: string) =>
+    items.find((i) => i.id === id)?.quantity || 0;
 
   const handleQuantityChange = async (product: Product, delta: number) => {
     const currentQty = getQuantity(product.id);

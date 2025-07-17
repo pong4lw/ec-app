@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 
 // クライアントコンポーネントとして遅延読み込み
-const CheckoutForm = dynamic(() => import("@/components/Atoms/CheckoutForm"), {
+const CheckoutForm = dynamic(() => import("@/components/atoms/CheckoutForm"), {
   ssr: true,
 });
 
