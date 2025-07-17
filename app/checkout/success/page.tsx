@@ -4,14 +4,12 @@ import React from "react";
 export default async function SuccessPage({
   searchParams,
 }: {
-  searchParams?: Record<string, string | string[] | undefined>;
+  searchParams?: Record<string, unknown>;
 }) {
   const orderId =
     typeof searchParams?.orderId === "string"
       ? searchParams.orderId
-      : Array.isArray(searchParams?.orderId)
-        ? searchParams.orderId[0]
-        : undefined;
+      : undefined;
 
   return (
     <div className="p-6">
