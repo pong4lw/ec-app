@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/components/organisms/Auth/AuthContext";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/lib/firestore/cart";
-import { createOrder } from "@/lib/firestore/orders"; // ← Firestore登録関数
+import { createOrder, saveOrder } from "@/lib/firestore/orders"; // ← Firestore登録関数
 
 // バリデーションスキーマ
 const CheckoutSchema = z.object({
@@ -53,7 +53,7 @@ export default function CheckoutForm() {
     }
 
     try {
-      await saveOrder({
+      const orderId = await saveOrder({
         items,
         name: data.name,
         email: data.email,
@@ -61,7 +61,7 @@ export default function CheckoutForm() {
         phone: data.phone,
         payment: data.payment,
       });
-      clearCart();
+      //      clearCart();
       router.push(`/checkout/success?orderId=${orderId}`);
     } catch (err) {
       console.error("注文エラー:", err);
@@ -84,7 +84,9 @@ export default function CheckoutForm() {
           {...register("name")}
           className="mt-1 w-full border px-3 py-2 rounded"
         />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+        {errors.name && (
+          <p className="text-red-500 text-sm">{errors.name.message}</p>
+        )}
       </div>
 
       {/* メールアドレス */}
@@ -95,7 +97,9 @@ export default function CheckoutForm() {
           {...register("email")}
           className="mt-1 w-full border px-3 py-2 rounded"
         />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+        {errors.email && (
+          <p className="text-red-500 text-sm">{errors.email.message}</p>
+        )}
       </div>
 
       {/* 住所 */}
@@ -106,7 +110,9 @@ export default function CheckoutForm() {
           {...register("address")}
           className="mt-1 w-full border px-3 py-2 rounded"
         />
-        {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
+        {errors.address && (
+          <p className="text-red-500 text-sm">{errors.address.message}</p>
+        )}
       </div>
 
       {/* 電話番号 */}
@@ -117,7 +123,9 @@ export default function CheckoutForm() {
           {...register("phone")}
           className="mt-1 w-full border px-3 py-2 rounded"
         />
-        {errors.phone && <p className="text-red-500 text-sm">{errors.phone.message}</p>}
+        {errors.phone && (
+          <p className="text-red-500 text-sm">{errors.phone.message}</p>
+        )}
       </div>
 
       {/* 支払い方法 */}

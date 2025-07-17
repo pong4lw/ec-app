@@ -26,17 +26,21 @@ const getCurrentUser = () => {
 };
 
 // ✅ 注文を Firestore に保存
-export const saveOrder = async (order: OrderData) => {
-  const user = getCurrentUser();
-
-  const colRef = collection(db, "orders", user.uid, "list");
-  const docRef = await addDoc(colRef, {
-    ...order,
-    createdAt: serverTimestamp(),
+export async function saveOrder(orderData: {
+  items: any[];
+  name: string;
+  email: string;
+  address: string;
+  phone: string;
+  payment: string;
+}) {
+  const docRef = await addDoc(collection(db, "orders"), {
+    ...orderData,
+    createdAt: Timestamp.now(),
   });
 
-  return docRef.id;
-};
+  return docRef.id; // ← これで orderId を返す
+}
 
 // ✅ 注文履歴を取得
 export const fetchOrderHistory = async (): Promise<any[]> => {
