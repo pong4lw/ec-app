@@ -10,11 +10,7 @@ import { FavoriteButton } from "@/components/atoms/FavoriteButton";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { Product, CartItem } from "@/types";
 
-type PageProps = {
-  params: { id: string };
-};
-
-export default function ProductDetailPage({ params }: PageProps) {
+export default function ProductDetailPage({ params }: any) {
   const { id } = params;
 
   const [product, setProduct] = useState<Product | null>(null);
