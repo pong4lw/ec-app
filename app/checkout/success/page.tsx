@@ -1,6 +1,5 @@
 // app/checkout/success/page.tsx
 import React from "react";
-import { Metadata } from "next";
 
 type PageProps = {
   searchParams?: { [key: string]: string | string[] | undefined };
