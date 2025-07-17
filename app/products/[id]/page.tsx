@@ -22,8 +22,7 @@ export default function ProductDetailPage({ params }: any) {
     async function fetchData() {
       const p = await getProductById(id);
       setProduct(p);
-
-      if (p?.tags?.length > 0) {
+      if (Array.isArray(p?.tags) && p.tags.length > 0) {
         const related = await fetchProductsByTags(p.tags, p.id);
         setRelatedProducts(related);
       }
