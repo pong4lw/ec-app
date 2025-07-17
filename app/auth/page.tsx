@@ -1,3 +1,4 @@
+import React from "react";
 import AuthForm from "@/components/organisms/Auth/AuthForm";
 
 export default function AuthPage() {

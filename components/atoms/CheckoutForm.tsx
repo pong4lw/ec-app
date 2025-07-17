@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +8,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/components/organisms/Auth/AuthContext";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/lib/firestore/cart";
-import { createOrder, saveOrder } from "@/lib/firestore/orders"; // ← Firestore登録関数
+import { saveOrder } from "@/lib/firestore/orders"; // ← Firestore登録関数
 
 // バリデーションスキーマ
 const CheckoutSchema = z.object({

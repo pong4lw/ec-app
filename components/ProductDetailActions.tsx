@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
-import { useCartStore } from '@/lib/firestore/cart';
+import React from "react";
+import { useCartStore } from "@/lib/firestore/cart";
 
 export default function ProductDetailActions({ id, name, price, imageUrl }) {
   const { addToCart, removeFromCart, updateQuantity, items } = useCartStore();

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchOrderHistory } from "@/lib/firestore/orders";
 
 export default function OrdersPage() {

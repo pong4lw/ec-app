@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { fetchProducts } from "@/lib/firestore/products";
@@ -31,7 +32,8 @@ export default function ProductListPage() {
     load();
   }, []);
 
-  const getQuantity = (id: string) => items.find((i) => i.id === id)?.quantity || 0;
+  const getQuantity = (id: string) =>
+    items.find((i) => i.id === id)?.quantity || 0;
 
   return (
     <div className="p-8">
@@ -96,7 +98,7 @@ export default function ProductListPage() {
                   </button>
 
                   {/* お気に入りボタン */}
-                    <FavoriteButton product={product} />
+                  <FavoriteButton product={product} />
                 </div>
               </div>
             );

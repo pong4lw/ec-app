@@ -1,6 +1,7 @@
 // src/components/cart/CartIndicator.tsx
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { useCartStore } from "@/store/cart";
 

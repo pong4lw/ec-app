@@ -1,4 +1,5 @@
 // components/ProductCard.tsx
+import React from "react";
 import Image from "next/image";
 
 type Product = {
@@ -22,9 +23,13 @@ export default function ProductCard({ product }: { product: Product }) {
         />
       </div>
       <div className="flex flex-col flex-grow">
-        <p className="text-lg font-semibold mb-1">{product.price.toLocaleString()} 円</p>
+        <p className="text-lg font-semibold mb-1">
+          {product.price.toLocaleString()} 円
+        </p>
         <p className="text-gray-700 mb-2">{product.name}</p>
-        <p className={`text-sm ${product.inStock ? "text-green-600" : "text-red-600"}`}>
+        <p
+          className={`text-sm ${product.inStock ? "text-green-600" : "text-red-600"}`}
+        >
           {product.inStock ? "在庫あり" : "在庫なし"}
         </p>
       </div>

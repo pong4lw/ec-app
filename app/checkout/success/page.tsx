@@ -1,4 +1,5 @@
 // app/checkout/success/page.tsx
+import React from "react";
 
 type Props = {
   searchParams: {

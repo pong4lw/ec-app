@@ -1,6 +1,7 @@
 // app/favorites/page.tsx
 "use client";
 
+import React from "react";
 import { useFavoriteStore } from "@/lib/firestore/favorites";
 import Image from "next/image";
 import Link from "next/link";
