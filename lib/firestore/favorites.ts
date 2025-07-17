@@ -7,6 +7,7 @@ type FavoriteItem = {
   id: string;
   name: string;
   imageUrl?: string;
+  price?: number;
 };
 
 type FavoriteState = {
