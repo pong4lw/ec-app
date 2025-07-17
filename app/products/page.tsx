@@ -1,3 +1,4 @@
+// app/products/page.tsx
 "use client";
 
 import React from "react";
@@ -5,12 +6,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { Product } from "@/lib/firestore/products";
 import { useCartStore } from "@/lib/firestore/cart";
+import { getProducts } from "@/lib/firestore/products";
+
+export default async function ProductPage() {
+  const products = await getProducts(); // サーバーコンポーネントで取得
+
+  return <ProductListClient products={products} />;
+}
 
 type Props = {
   products: Product[];
 };
 
-export const ProductListClient = ({ products }: Props) => {
+function ProductListClient({ products }: Props) {
   const { items, addToCart, updateQuantity, removeFromCart } = useCartStore();
 
   const getQuantity = (id: string) =>
@@ -37,7 +45,6 @@ export const ProductListClient = ({ products }: Props) => {
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-6">商品一覧</h1>
-
       {products.length === 0 ? (
         <p className="text-gray-500">現在、商品が登録されていません。</p>
       ) : (
@@ -74,7 +81,6 @@ export const ProductListClient = ({ products }: Props) => {
                   </p>
                 </Link>
 
-                {/* 増減ボタン */}
                 <div className="mt-4 flex items-center gap-2">
                   <button
                     onClick={() => handleQuantityChange(product, -1)}
@@ -97,4 +103,4 @@ export const ProductListClient = ({ products }: Props) => {
       )}
     </div>
   );
-};
+}
