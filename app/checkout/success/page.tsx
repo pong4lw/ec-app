@@ -1,14 +1,17 @@
 // app/checkout/success/page.tsx
 import React from "react";
 
-type PageProps = {
-  searchParams?: {
-    orderId?: string;
-  };
-};
-
-export default async function SuccessPage({ searchParams }: PageProps) {
-  const orderId = searchParams?.orderId;
+export default async function SuccessPage({
+  searchParams,
+}: {
+  searchParams?: Record<string, string | string[] | undefined>;
+}) {
+  const orderId =
+    typeof searchParams?.orderId === "string"
+      ? searchParams.orderId
+      : Array.isArray(searchParams?.orderId)
+        ? searchParams?.orderId[0]
+        : undefined;
 
   return (
     <div className="p-6">
