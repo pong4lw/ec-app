@@ -5,24 +5,12 @@ import {
   addDoc,
   getDocs,
   Timestamp,
-  serverTimestamp,
   query,
   where,
   orderBy,
 } from "firebase/firestore";
 
 import { CartItem } from "@/lib/firestore/cart";
-
-// 注文データ型（必要に応じて拡張）
-type OrderData = {
-  userId: string;
-  items: CartItem[];
-  name: string;
-  email: string;
-  address: string;
-  phone: string;
-  payment: "credit" | "bank" | "cash";
-};
 
 // 共通：現在のユーザー取得
 const getCurrentUser = () => {

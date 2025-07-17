@@ -24,9 +24,7 @@ type CartState = {
 };
 
 export async function clearCartInFirestore(userId: string) {
-  const user = auth.currentUser;
-  if (!user) return;
-  const ref = doc(db, "carts", user.uid);
+  const ref = doc(db, "carts", userId);
   await setDoc(ref, { items: [] });
 }
 
@@ -48,9 +46,9 @@ export const useCartStore = create<CartState>((set, get) => {
       set({ items: [] }); // ローカルカートを空にする
     },
 
-    setItems: (items, loading) => set({ items, loading: false }),
+    setItems: (items) => set({ items, loading: false }),
 
-    loadCartOnce: async (loading: string) => {
+    loadCartOnce: async () => {
       const user = auth.currentUser;
       if (!user) {
         set({ items: [], loading: false });
