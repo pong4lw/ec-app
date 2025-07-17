@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { db, auth } from "@/lib/firebase";
 import { getAuth } from "firebase/auth";
 import {
@@ -54,7 +55,7 @@ export async function saveOrder(orderData: {
 }
 
 // ✅ 注文履歴を取得
-export async function fetchOrderHistory() {
+export async function fetchOrderHistory(): any {
   const auth = getAuth();
   console.log(auth);
   const user = auth.currentUser;
