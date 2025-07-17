@@ -2,7 +2,9 @@
 import React from "react";
 
 type PageProps = {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams: {
+    orderId?: string;
+  };
 };
 
 export default function SuccessPage({ searchParams }: PageProps) {
@@ -11,7 +13,7 @@ export default function SuccessPage({ searchParams }: PageProps) {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">ご注文ありがとうございました！</h1>
-      <p>注文番号：{orderId}</p>
+      <p>注文番号：{orderId ?? "不明"}</p>
     </div>
   );
 }
