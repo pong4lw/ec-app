@@ -11,6 +11,26 @@ import {
   orderBy,
 } from "firebase/firestore";
 
+export interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+export interface Order {
+  id: string;
+  items: OrderItem[];
+  name: string;
+  email: string;
+  address: string;
+  phone: string;
+  payment: string;
+  createdAt: {
+    toDate: () => Date;
+  };
+}
+
 // 共通：現在のユーザー取得
 const getCurrentUser = () => {
   const user = auth.currentUser;
@@ -55,7 +75,7 @@ export async function saveOrder(orderData: {
 }
 
 // ✅ 注文履歴を取得
-export async function fetchOrderHistory(): any {
+export async function fetchOrderHistory(): Promise<Order[]> {
   const auth = getAuth();
   console.log(auth);
   const user = auth.currentUser;
