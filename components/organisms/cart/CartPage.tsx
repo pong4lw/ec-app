@@ -24,7 +24,12 @@ export default function CartPage() {
       }
       setProducts(prods);
     }
-    items.length > 0 ? load() : setProducts([]);
+
+    if (items.length > 0) {
+      load();
+    } else {
+      setProducts([]);
+    }
   }, [items]);
 
   const getQuantity = (id: string) =>
