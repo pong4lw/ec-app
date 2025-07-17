@@ -48,9 +48,9 @@ export const useCartStore = create<CartState>((set, get) => {
       set({ items: [] }); // ローカルカートを空にする
     },
 
-    setItems: (items) => set({ items, loading: false }),
+    setItems: (items, loading) => set({ items, loading: false }),
 
-    loadCartOnce: async () => {
+    loadCartOnce: async (loading: string) => {
       const user = auth.currentUser;
       if (!user) {
         set({ items: [], loading: false });
