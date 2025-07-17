@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React from "react";
 
 // app/checkout/success/page.tsx
 export default function SuccessPage({ searchParams }: any) {
