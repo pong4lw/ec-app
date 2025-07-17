@@ -1,13 +1,11 @@
 // app/checkout/success/page.tsx
 import React from "react";
 
-type PageProps = {
-  searchParams: {
-    orderId?: string;
-  };
-};
-
-export default function SuccessPage({ searchParams }: PageProps) {
+export default function SuccessPage({
+  searchParams,
+}: {
+  searchParams: { orderId?: string };
+}) {
   const orderId = searchParams?.orderId;
 
   return (
