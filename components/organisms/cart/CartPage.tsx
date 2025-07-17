@@ -36,7 +36,11 @@ export default function CartPage() {
     items.find((i) => i.id === id)?.quantity || 0;
   const onChangeQuantity = (id: string, delta: number) => {
     const nextQty = getQuantity(id) + delta;
-    nextQty < 1 ? removeFromCart(id) : updateQuantity(id, nextQty);
+    if (nextQty < 1) {
+      removeFromCart(id);
+    } else {
+      updateQuantity(id, nextQty);
+    }
   };
 
   return (
