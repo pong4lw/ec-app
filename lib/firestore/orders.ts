@@ -1,15 +1,21 @@
 import { db, auth } from "@/lib/firebase";
+import { getAuth } from "firebase/auth";
 import {
   collection,
   addDoc,
   getDocs,
   Timestamp,
   serverTimestamp,
+  query,
+  where,
+  orderBy,
 } from "firebase/firestore";
+
 import { CartItem } from "@/lib/firestore/cart";
 
 // 注文データ型（必要に応じて拡張）
 type OrderData = {
+  userId: string;
   items: CartItem[];
   name: string;
   email: string;
@@ -26,31 +32,56 @@ const getCurrentUser = () => {
 };
 
 // ✅ 注文を Firestore に保存
+
 export async function saveOrder(orderData: {
-  items: any[];
+  items: {
+    productId: string;
+    name: string;
+    price: number;
+    quantity: number;
+  }[];
+  userId: string;
   name: string;
   email: string;
   address: string;
   phone: string;
   payment: string;
 }) {
+  const itemsWithSubtotal = orderData.items.map((item) => ({
+    ...item,
+    subtotal: item.price * item.quantity,
+  }));
+  const user = getCurrentUser();
+
   const docRef = await addDoc(collection(db, "orders"), {
-    ...orderData,
+    items: itemsWithSubtotal,
+    userId: user?.uid || "guest",
+    name: orderData.name,
+    email: orderData.email,
+    address: orderData.address,
+    phone: orderData.phone,
+    payment: orderData.payment,
     createdAt: Timestamp.now(),
   });
 
-  return docRef.id; // ← これで orderId を返す
+  return docRef.id;
 }
 
 // ✅ 注文履歴を取得
-export const fetchOrderHistory = async (): Promise<any[]> => {
-  const user = getCurrentUser();
+export async function fetchOrderHistory() {
+  const auth = getAuth();
+  console.log(auth);
+  const user = auth.currentUser;
+  console.log(user);
 
-  const colRef = collection(db, "orders", user.uid, "list");
-  const snap = await getDocs(colRef);
+  if (!user) return [];
 
-  return snap.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-};
+  const q = query(
+    collection(db, "orders"),
+    where("userId", "==", user.uid),
+    orderBy("createdAt", "desc"),
+  );
+
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}

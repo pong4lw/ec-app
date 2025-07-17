@@ -23,6 +23,13 @@ type CartState = {
   loadCartOnce: () => Promise<void>;
 };
 
+export async function clearCartInFirestore(userId: string) {
+  const user = auth.currentUser;
+  if (!user) return;
+  const ref = doc(db, "carts", user.uid);
+  await setDoc(ref, { items: [] });
+}
+
 export const useCartStore = create<CartState>((set, get) => {
   const syncCartToFirestore = async (items: CartItem[]) => {
     const user = auth.currentUser;
@@ -35,6 +42,11 @@ export const useCartStore = create<CartState>((set, get) => {
   return {
     items: [],
     loading: true,
+
+    clearCart: async (userId: string) => {
+      await clearCartInFirestore(userId); // Firebase 側を先にクリア
+      set({ items: [] }); // ローカルカートを空にする
+    },
 
     setItems: (items) => set({ items, loading: false }),
 
@@ -63,11 +75,11 @@ export const useCartStore = create<CartState>((set, get) => {
       const existing = current.find((i) => i.id === item.id);
       const newItems = existing
         ? current.map((i) =>
-            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i,
           )
         : [...current, { ...item, quantity: 1 }];
       set({ items: newItems });
-  console.log("syncing:", newItems);
+      console.log("syncing:", newItems);
 
       await syncCartToFirestore(newItems);
     },
@@ -78,10 +90,10 @@ export const useCartStore = create<CartState>((set, get) => {
         return;
       }
       const updated = get().items.map((i) =>
-        i.id === id ? { ...i, quantity } : i
+        i.id === id ? { ...i, quantity } : i,
       );
       set({ items: updated });
-  console.log("syncing:", updated);
+      console.log("syncing:", updated);
 
       await syncCartToFirestore(updated);
     },
@@ -89,7 +101,7 @@ export const useCartStore = create<CartState>((set, get) => {
     removeFromCart: async (id) => {
       const updated = get().items.filter((i) => i.id !== id);
       set({ items: updated });
-  console.log("syncing:", updated);
+      console.log("syncing:", updated);
 
       await syncCartToFirestore(updated);
     },

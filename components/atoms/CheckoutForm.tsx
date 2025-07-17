@@ -25,7 +25,8 @@ type CheckoutFormData = z.infer<typeof CheckoutSchema>;
 export default function CheckoutForm() {
   const { user } = useAuth();
   const router = useRouter();
-  const { items, clearCart } = useCartStore();
+  const { items } = useCartStore();
+  const clearCart = useCartStore((state) => state.clearCart);
 
   const {
     register,
@@ -54,14 +55,21 @@ export default function CheckoutForm() {
 
     try {
       const orderId = await saveOrder({
-        items,
+        items: items.map((item) => ({
+          productId: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        })),
         name: data.name,
         email: data.email,
         address: data.address,
         phone: data.phone,
         payment: data.payment,
       });
-      //      clearCart();
+
+      await clearCart(user.uid);
+
       router.push(`/checkout/success?orderId=${orderId}`);
     } catch (err) {
       console.error("注文エラー:", err);
