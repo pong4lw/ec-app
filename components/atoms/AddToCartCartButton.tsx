@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useCartStore } from "@/store/cart";
+import { useCartStore } from "@/lib/firestore/cart";
 
 type Props = {
   id: string;
