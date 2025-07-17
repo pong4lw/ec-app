@@ -16,8 +16,8 @@ const CheckoutSchema = z.object({
   email: z.string().email("有効なメールアドレスを入力してください"),
   address: z.string().min(1, "住所を入力してください"),
   phone: z.string().regex(/^\d{10,11}$/, "電話番号を正しく入力してください"),
-  payment: z.enum(["credit", "bank", "cash"], {
-    required_error: "支払い方法を選択してください",
+  payment: z.enum(["credit", "bank", "cash"]).refine((val) => !!val, {
+    message: "支払い方法を選択してください",
   }),
 });
 
