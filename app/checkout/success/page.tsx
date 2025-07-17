@@ -1,11 +1,7 @@
-// app/checkout/success/page.tsx
-import React from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-export default async function SuccessPage({
-  searchParams,
-}: {
-  searchParams?: Record<string, unknown>;
-}) {
+// app/checkout/success/page.tsx
+export default function SuccessPage({ searchParams }: any) {
   const orderId =
     typeof searchParams?.orderId === "string"
       ? searchParams.orderId
