@@ -10,8 +10,6 @@ import {
   orderBy,
 } from "firebase/firestore";
 
-import { CartItem } from "@/lib/firestore/cart";
-
 // 共通：現在のユーザー取得
 const getCurrentUser = () => {
   const user = auth.currentUser;
