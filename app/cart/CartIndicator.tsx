@@ -3,7 +3,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { useCartStore } from "@/firestore/cart";
+import { useCartStore } from "@/lib/firestore/cart";
 
 export default function CartIndicator() {
   const items = useCartStore((state) => state.items);
