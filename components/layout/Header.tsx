@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useAuth } from "@/components/organisms/Auth/AuthContext";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import AuthFormModal from "@/components/organisms/Auth/AuthFormModal";
 
 export const Header = () => {
   const { user, loading } = useAuth();

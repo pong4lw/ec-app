@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/components/organisms/Auth/AuthContext";
 

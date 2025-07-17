@@ -4,23 +4,21 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getProductById, fetchProductsByTags } from "@/lib/firestore/products";
-import { useFavoriteStore } from "@/lib/firestore/favorites";
 import { useCartStore } from "@/lib/firestore/cart";
 import { FavoriteButton } from "@/components/atoms/FavoriteButton";
 import { FaPlus, FaMinus } from "react-icons/fa";
-import { use } from "react";
+import { Product, CartItem } from "@/types";
 
 type PageProps = {
   params: { id: string };
 };
 
 export default function ProductDetailPage({ params }: PageProps) {
-  const { id } = use(params);
+  const { id } = params;
 
-  const [product, setProduct] = useState<any>(null);
-  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
 
-  const { items: favoriteItems } = useFavoriteStore();
   const { items: cartItems, addToCart, updateQuantity } = useCartStore();
 
   useEffect(() => {
@@ -39,13 +37,13 @@ export default function ProductDetailPage({ params }: PageProps) {
   if (!product) return <div>読み込み中...</div>;
 
   const imageUrl = product.imageUrl || "/no-image.webp";
-  const quantity = cartItems.find((i) => i.id === product.id)?.quantity || 0;
+  const quantity =
+    cartItems.find((i: CartItem) => i.id === product.id)?.quantity || 0;
 
   return (
     <div className="p-8">
       <div className="flex justify-between items-start mb-4">
         <h1 className="text-3xl font-bold">{product.name}</h1>
-
         <FavoriteButton product={product} />
       </div>
 
@@ -64,7 +62,6 @@ export default function ProductDetailPage({ params }: PageProps) {
         カテゴリ: {product.category ?? "なし"}
       </p>
 
-      {/* カートの増減ボタン */}
       <div className="flex items-center gap-2 mt-4">
         <button
           onClick={() => updateQuantity(product.id, quantity - 1)}
@@ -89,7 +86,6 @@ export default function ProductDetailPage({ params }: PageProps) {
         </button>
       </div>
 
-      {/* 関連商品 */}
       {relatedProducts.length > 0 && (
         <div className="mt-10">
           <h2 className="text-2xl font-semibold mb-4">同じタグの商品</h2>

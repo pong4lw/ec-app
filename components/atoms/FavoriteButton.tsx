@@ -8,7 +8,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
-  [key: string]: any; // 不明な追加プロパティがある場合は必要に応じて
+  [key: string]; // 不明な追加プロパティがある場合は必要に応じて
 }
 
 export const FavoriteButton = ({ product }: { product: Product }) => {
