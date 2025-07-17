@@ -29,7 +29,7 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    fetchOrderHistory().then(setOrders);
+    fetchOrderHistory().then((data) => setOrders(data as Order[]));
   }, []);
 
   return (
