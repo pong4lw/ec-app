@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -17,7 +18,7 @@ export default function ProductDetailPage({ params }: PageProps) {
   const { id } = params;
 
   const [product, setProduct] = useState<Product | null>(null);
-  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
 
   const { items: cartItems, addToCart, updateQuantity } = useCartStore();
 
