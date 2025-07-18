@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { CartItem } from "./CartItem";
-import { CartSummary } from "./CartSummary";
 import { Product } from "@/lib/firestore/products";
 
 type Props = {
@@ -38,7 +37,6 @@ export const CartList = ({
           onRemove={() => onRemove(product.id)}
         />
       ))}
-      <CartSummary total={total} />
     </div>
   );
 };
