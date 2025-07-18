@@ -1,9 +1,9 @@
 // mocks/handlers.ts
-import { rest } from 'msw'; // ✅ これが正しい
+import { http } from 'msw';
 
 export const handlers = [
   // 商品一覧取得API
-  rest.get('/api/products', (req, res, ctx) => {
+  http.get('/api/products', ({ request }, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json([
@@ -14,8 +14,8 @@ export const handlers = [
   }),
 
   // 商品詳細取得API
-  rest.get('/api/products/:id', (req, res, ctx) => {
-    const { id } = req.params;
+  http.get('/api/products/:id', ({ params }, res, ctx) => {
+    const { id } = params;
     return res(
       ctx.status(200),
       ctx.json({ id, name: 'テスト商品', price: 2000, imageUrl: '', description: 'テスト詳細' })
