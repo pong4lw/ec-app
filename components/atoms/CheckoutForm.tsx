@@ -62,6 +62,7 @@ export default function CheckoutForm() {
           price: item.price,
           quantity: item.quantity,
         })),
+        userId: user.uid,
         name: data.name,
         email: data.email,
         address: data.address,
