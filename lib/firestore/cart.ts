@@ -104,6 +104,5 @@ export const useCartStore = create<CartState>((set, get) => {
 
       await syncCartToFirestore(updated);
     },
-    clearCart: () => set({ items: [] }),
   };
 });
