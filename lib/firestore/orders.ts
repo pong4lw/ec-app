@@ -77,9 +77,7 @@ export async function saveOrder(orderData: {
 // ✅ 注文履歴を取得
 export async function fetchOrderHistory(): Promise<Order[]> {
   const auth = getAuth();
-  console.log(auth);
   const user = auth.currentUser;
-  console.log(user);
 
   if (!user) return [];
 
@@ -90,5 +88,18 @@ export async function fetchOrderHistory(): Promise<Order[]> {
   );
 
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  
+  return snapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      items: data.items,
+      name: data.name,
+      email: data.email,
+      address: data.address,
+      phone: data.phone,
+      payment: data.payment,
+      createdAt: data.createdAt,
+    } as Order;
+  });
 }
