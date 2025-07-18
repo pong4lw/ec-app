@@ -37,6 +37,9 @@ export const CartList = ({
           onRemove={() => onRemove(product.id)}
         />
       ))}
+    <div className="text-right text-lg font-semibold">
+      合計: ¥{total.toLocaleString()}
     </div>
+  </div>
   );
 };
