@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // components/FavoriteButton.tsx
 "use client";
 import React from "react";
@@ -8,7 +9,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
-  [key: string]; // 不明な追加プロパティがある場合は必要に応じて
+  [key: string]: any;
 }
 
 export const FavoriteButton = ({ product }: { product: Product }) => {
