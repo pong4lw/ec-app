@@ -21,7 +21,7 @@ type CartState = {
   updateQuantity: (id: string, quantity: number) => Promise<void>;
   removeFromCart: (id: string) => Promise<void>;
   loadCartOnce: () => Promise<void>;
-  clearCart: () => void;
+  clearCart: (userId: string) => void;
 };
 
 export async function clearCartInFirestore(userId: string) {
