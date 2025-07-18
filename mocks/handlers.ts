@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // mocks/handlers.ts
 import { http } from 'msw';
 
