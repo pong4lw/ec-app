@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useCartStore } from "@/lib/firestore/cart";
 import { getProductById, Product } from "@/lib/firestore/products";
 import { useInitCartSync } from "@/lib/firestore/cartSync";
-import { CartList } from "@/components/pages/Cart/CartList";
+import { CartList } from "@/components/organisms/cart/CartList";
 
 export default function CartPage() {
   const items = useCartStore((state) => state.items);
