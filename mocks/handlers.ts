@@ -1,5 +1,5 @@
 // mocks/handlers.ts
-import { rest } from 'msw/node';
+import { rest } from 'msw/browser';
 
 export const handlers = [
   // 商品一覧取得API
